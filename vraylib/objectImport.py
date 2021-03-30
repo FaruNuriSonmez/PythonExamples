@@ -37,11 +37,15 @@ def setup_scene(renderer, obj_diameter):
     rect.intensity = 10
 
 
-def to_vector_list(vertc):
+def to_vector_list (vertc):
+    print(vertc)
     vrayVectorList = vray.VectorList()
-    for v in vertc:
-        vrayVector = vray.Vector(v[0], v[1], v[2])
+    i=0
+    while i < len(vertc):
+        vrayVector = vray.Vector(vertc[i], vertc[i+1], vertc[i+2])
+        i += 3
         vrayVectorList.append(vrayVector)
+    print(vrayVectorList)
     return vrayVectorList
 
 def to_int_list(vrayIList):
@@ -54,7 +58,6 @@ def to_int_list(vrayIList):
 
 
 def add_obj(renderer, material, smooth=False):
-
     if len(vertices) == 0 or len(faces) == 0:
         return
     mesh = renderer.classes.GeomStaticMesh()
@@ -82,7 +85,7 @@ def add_obj(renderer, material, smooth=False):
 
 
 if __name__ == "__main__":
-    gltf_loader(filename="../../glTF-Sample-Models/sugartech/tp_livelokonsol_High1433.glb")
+    GLTFVRayLoader.gltf_loader(filename="../../glTF-Sample-Models/sugartech/tp_livelokonsol_High1433d.glb")
     to_int_list(faces)
     with vray.VRayRenderer() as renderer:
         renderer.keepInteractiveRunning = True
