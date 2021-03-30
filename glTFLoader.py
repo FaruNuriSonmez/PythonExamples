@@ -1,18 +1,14 @@
-import pathlib
 import struct
-
-import miniball as nb
 import numpy as np
-
 from pygltflib import GLTF2
 
-#filename = "../glTF-Sample-Models/sugartech/tp_livelokonsol_High1433.glb"
-filename = "../glTF-Sample-Models/sugartech/109142Com_d.glb"
+filename = "../glTF-Sample-Models/sugartech/tp_livelokonsol_High1433.glb"
 
 gltf = GLTF2().load(filename)
 
 mesh = gltf.meshes[gltf.scenes[gltf.scene].nodes[0]]
 print(mesh.name)
+
 for primitive in mesh.primitives:
     print(primitive)
     accessorPosition = gltf.accessors[primitive.attributes.POSITION]
@@ -46,13 +42,12 @@ for primitive in mesh.primitives:
         v = struct.unpack("<fff", d)  # convert from base64 to three floats
         vertices.append(v)
         #print(i, v)
-
-    print(len(vertices))
+        #print(len(vertices))
 
     accessorIndice = gltf.accessors[primitive.indices]
     bufferViewIndices = gltf.bufferViews[accessorIndice.bufferView]
     buffer = gltf.buffers[bufferView.buffer]
-
+    #print(vertices)
     indices = np.frombuffer(
         binary_blob[
         bufferViewIndices.byteOffset
@@ -65,7 +60,7 @@ for primitive in mesh.primitives:
 
     print(len(indices))
     #for i in indices:
-    # print(i)
+    print(i)
 
     if primitive.attributes:
         if primitive.attributes.TEXCOORD_0 != None:
@@ -74,7 +69,7 @@ for primitive in mesh.primitives:
             accessorTextures = gltf.accessors[primitive.attributes.TEXCOORD_1]
 
     bufferViewTextures = gltf.bufferViews[accessorTextures.bufferView]
-    print(bufferViewTextures)
+    #print(bufferViewTextures)
 
     for i in range(accessorTextures.count):
         index = bufferViewTextures.byteOffset + accessorTextures.byteOffset + i * 8  # the location in the buffer of this vertex
@@ -82,6 +77,3 @@ for primitive in mesh.primitives:
         v = struct.unpack("<ff", d)  # convert from base64 to three floats
         vertices.append(v)
         #print(i, v)
-
-
-
