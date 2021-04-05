@@ -1,15 +1,19 @@
 from pygltflib import GLTF2, Scene
-from pygltflib.utils import ImageFormat
+from pygltflib.utils import ImageFormat, Image
 
 gltf = GLTF2()
 scene = Scene()
-
-filename = "../glTF-Sample-Models/2.0/AnimatedCube/glTF/AnimatedCube.gltf"
+filename = "../glTF-Sample-Models/sugartech/tp_livelokonsol_High1433.glb"
+texturePath = "./assets/textures"
 
 gltf = GLTF2.load(filename)
-gltf.images[0].name = "cube.png"
-gltf.convert_images(ImageFormat.FILE, path='/textures/')
+print(type(len(gltf.images)))
 
-gltf.images[0].uri
+i = -1
+while i < len(gltf.images)-1:
+    i += 1
+    gltf.images[i].name = "texture"
+    gltf.images[i].mimeType = 'image/png'
+gltf.convert_images(ImageFormat.FILE, path=texturePath)
 
-
+print()

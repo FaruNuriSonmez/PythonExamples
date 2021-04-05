@@ -4,17 +4,6 @@ from pygltflib import GLTF2
 
 filename = "../glTF-Sample-Models/sugartech/tp_livelokonsol_High1433.glb"
 gltf = GLTF2().load(filename)
-print(gltf.extensionsUsed[0])
-
-if len(gltf.extensionsUsed) > 1:
-    if filter(gltf.extensionsUsed,'KHR_draco_mesh_compression'):
-        print('dracooo')
-    else:
-        print('dracooo değil')
-
-
-#if ()
-    #print("")
 
 mesh = gltf.meshes[gltf.scenes[gltf.scene].nodes[0]]
 for primitive in mesh.primitives:
@@ -37,12 +26,15 @@ for primitive in mesh.primitives:
 
     #print(gltf.accessors[primitive.attributes.TANGENT])
 
-    #print(gltf.materials[primitive.material])
+    primitive_mat = gltf.materials[primitive.material]
+    print(primitive_mat.normalTexture)
 
     #print(gltf.images[gltf.materials[primitive.material].pbrMetallicRoughness.metallicRoughnessTexture.index])
     #print(gltf.bufferViews[5])
 
     vertices = []
+    textureVertices = []
+    textureFaces = []
     for i in range(accessorPosition.count):
         index = bufferView.byteOffset + accessorPosition.byteOffset + i * 12  # the location in the buffer of this vertex
         d = binary_blob[index:index + 12]  # the vertex data
@@ -52,8 +44,8 @@ for primitive in mesh.primitives:
         vertices.append(v[1])
         vertices.append(v[2])
         #print(i, v)
-    print(len(vertices))
-    print(gltf.accessors)
+    #print(len(vertices))
+    #print(gltf.accessors)
     accessorIndice = gltf.accessors[primitive.indices]
     bufferViewIndices = gltf.bufferViews[accessorIndice.bufferView]
     buffer = gltf.buffers[bufferView.buffer]
@@ -67,9 +59,10 @@ for primitive in mesh.primitives:
         dtype="uint16",
         count=accessorIndice.count)
 
-    print(len(indices))
+    #print(len(indices))
     #for i in indices:
         #print(i)
+
     if primitive.attributes:
         if primitive.attributes.TEXCOORD_0 != None:
             accessorTextures = gltf.accessors[primitive.attributes.TEXCOORD_0]
@@ -77,11 +70,15 @@ for primitive in mesh.primitives:
             accessorTextures = gltf.accessors[primitive.attributes.TEXCOORD_1]
 
     bufferViewTextures = gltf.bufferViews[accessorTextures.bufferView]
-    #print(bufferViewTextures)
+    #print(gltf.bufferViews)
 
     for i in range(accessorTextures.count):
         index = bufferViewTextures.byteOffset + accessorTextures.byteOffset + i * 8  # the location in the buffer of this vertex
         d = binary_blob[index:index + 8]  # the vertex data
         v = struct.unpack("<ff", d)  # convert from base64 to three floats
-        vertices.append(v)
+        textureVertices.append(v)
         #print(i, v)
+
+
+
+
