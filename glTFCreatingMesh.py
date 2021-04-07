@@ -3,7 +3,7 @@ import numpy as np
 from pygltflib import *
 
 
-def gltfCreatingMesh(width, length):
+def gltfCreatingMesh(width, length, texture):
     vertices = np.array(
         [
             [-width/2, 0, -length/2],
@@ -169,7 +169,7 @@ def gltfCreatingMesh(width, length):
         ],
     )
     image = Image()
-    image.uri = "resim.png"
+    image.uri = texture
     image.name = "resimName"
     gltf.images.append(image)
     gltf.convert_images(ImageFormat.DATAURI)
@@ -179,4 +179,4 @@ def gltfCreatingMesh(width, length):
 
 
 if __name__ == "__main__":
-    gltfCreatingMesh(5, 5)
+    gltfCreatingMesh(10, 5, "resim.png")
