@@ -2,7 +2,7 @@ import struct
 import numpy as np
 from pygltflib import GLTF2
 
-filename = "../glTF-Sample-Models/sugartech/tp_livelokonsol_High1433.glb"
+filename = "../glTF-Sample-Models/3.0/Livelo/glb/tp_livelokonsol_High1433.glb"
 gltf = GLTF2().load(filename)
 
 mesh = gltf.meshes[gltf.scenes[gltf.scene].nodes[0]]
@@ -27,7 +27,7 @@ for primitive in mesh.primitives:
     #print(gltf.accessors[primitive.attributes.TANGENT])
 
     primitive_mat = gltf.materials[primitive.material]
-    print(primitive_mat.normalTexture)
+    print(primitive_mat)
 
     #print(gltf.images[gltf.materials[primitive.material].pbrMetallicRoughness.metallicRoughnessTexture.index])
     #print(gltf.bufferViews[5])

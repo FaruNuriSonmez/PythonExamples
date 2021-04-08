@@ -9,7 +9,7 @@ texturesVertices = []
 texturesFaces = []
 
 class GLTFVRayLoader:
-    def gltf_loader(filepath,texpath):
+    def gltf_loader(filepath, texpath):
         gltf = GLTF2.load(filepath)
         if len(gltf.extensionsUsed) > 1:
             if (gltf.extensionsUsed[1] == 'KHR_draco_mesh_compression'):
@@ -71,7 +71,6 @@ class GLTFVRayLoader:
                     texturesVertices.append(v[0])
                     texturesVertices.append(v[1])
                     texturesFaces.append(i)
-
                 i = -1
                 while i < len(gltf.images)-1:
                     i += 1
