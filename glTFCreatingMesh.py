@@ -2,7 +2,6 @@ from struct import *
 import numpy as np
 from pygltflib import *
 
-
 def gltfCreatingMesh(width, length, texture):
     vertices = np.array(
         [
@@ -145,7 +144,8 @@ def gltfCreatingMesh(width, length, texture):
         ],
         materials=[
             Material(
-                alphaMode=OPAQUE,
+                alphaMode=BLEND,
+                #alphaMode=OPAQUE,
                 doubleSided=True,
                 name="Material.001",
                 pbrMetallicRoughness=PbrMetallicRoughness(
@@ -179,4 +179,4 @@ def gltfCreatingMesh(width, length, texture):
 
 
 if __name__ == "__main__":
-    gltfCreatingMesh(10, 5, "resim.png")
+    gltfCreatingMesh(10, 5, "/alphaChannel.png")
