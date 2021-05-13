@@ -145,7 +145,7 @@ def gltfCreatingMesh(width, length, texture, output):
         ],
         materials=[
             Material(
-                alphaMode=BLEND,
+                alphaMode=MASK,
                 #alphaMode=OPAQUE,
                 doubleSided=True,
                 name="Material.001",
