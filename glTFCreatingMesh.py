@@ -1,8 +1,9 @@
 from struct import *
 import numpy as np
 from pygltflib import *
+import sys
 
-def gltfCreatingMesh(width, length, texture):
+def gltfCreatingMesh(width, length, texture, output):
     vertices = np.array(
         [
             [-width/2, 0, -length/2],
@@ -175,8 +176,8 @@ def gltfCreatingMesh(width, length, texture):
     gltf.convert_images(ImageFormat.DATAURI)
     gltf.set_binary_blob(indices_binary_blob + vertices_binary_blob +
                          texture_coordinates_binary_blob + normals_binary_blob)
-    gltf.save("plane.glb")
+    gltf.save(output + "plane.glb")
 
 
 if __name__ == "__main__":
-    gltfCreatingMesh(10, 5, "/alphaChannel.png")
+     gltfCreatingMesh(float(sys.argv[1]), float(sys.argv[2]), sys.argv[3], sys.argv[4])
