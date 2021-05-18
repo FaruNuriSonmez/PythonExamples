@@ -1,9 +1,32 @@
-from struct import *
 import numpy as np
 from pygltflib import *
-import sys
+import sys as sys
+from PIL import Image as pil
+import io
+
+
+
+def ThumbFromBuffer(texture):
+    im =  Image.open(texture)
+    im.thumbnail((1024,1024),Image.ANTIALIAS)
+    return im.tobytes()
+
+def readImagesAsBinary(texture):
+    
+    im = pil.open(texture)
+    im.thumbnail((1024,1024),pil.ANTIALIAS)
+    ioSave = io.BytesIO()
+    im.save(ioSave,format=("PNG"))
+    image_binary_blob= ioSave.getvalue()
+    bit = 4 - (len(image_binary_blob) % 4)
+
+    for i in range(bit):
+        image_binary_blob += bytes([0x000])
+    return image_binary_blob 
+
 
 def gltfCreatingMesh(width, length, texture, output):
+
     vertices = np.array(
         [
             [-width/2, 0, -length/2],
@@ -46,6 +69,7 @@ def gltfCreatingMesh(width, length, texture, output):
     vertices_binary_blob = vertices.tobytes()
     texture_coordinates_binary_blob = texture_coordinates.tobytes()
     normals_binary_blob = normals.tobytes()
+    image_binary_blob= readImagesAsBinary(texture)
 
     gltf = GLTF2(
         asset=[
@@ -142,6 +166,15 @@ def gltfCreatingMesh(width, length, texture, output):
                 byteLength=len(normals_binary_blob),
                 target=ARRAY_BUFFER,
             ),
+
+             BufferView(
+                buffer=0,
+                byteOffset=len(indices_binary_blob) +
+                len(vertices_binary_blob) +
+                len(texture_coordinates_binary_blob) + len(normals_binary_blob),
+                byteLength=len(image_binary_blob) ,
+                
+            ),
         ],
         materials=[
             Material(
@@ -158,26 +191,36 @@ def gltfCreatingMesh(width, length, texture, output):
         textures=[
             Texture(
                 source=0,
-                name='name'
+                name='name',
             )
+        ],
+        images = [
+            Image( 
+                mimeType= "image/png",
+                bufferView= 4
+              )
         ],
 
         buffers=[
             Buffer(
                 byteLength=len(indices_binary_blob) + len(vertices_binary_blob) +
-                len(texture_coordinates_binary_blob) + len(normals_binary_blob)
+                len(texture_coordinates_binary_blob) + len(normals_binary_blob) + len(image_binary_blob)
             )
         ],
     )
     image = Image()
     image.uri = texture
     image.name = "resimName"
-    gltf.images.append(image)
-    gltf.convert_images(ImageFormat.DATAURI)
+    #gltf.images.append(image)
+   # gltf.convert_images(ImageFormat.DATAURI)
     gltf.set_binary_blob(indices_binary_blob + vertices_binary_blob +
-                         texture_coordinates_binary_blob + normals_binary_blob)
+                         texture_coordinates_binary_blob + normals_binary_blob + image_binary_blob )
+
+    #gltf.convert_buffers(BufferFormat.BINARYBLOB)
+
     gltf.save(output + "plane.glb")
 
+    print(len(image_binary_blob) )
 
 if __name__ == "__main__":
      gltfCreatingMesh(float(sys.argv[1]), float(sys.argv[2]), sys.argv[3], sys.argv[4])
